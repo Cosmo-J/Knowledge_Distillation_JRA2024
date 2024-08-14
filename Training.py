@@ -11,6 +11,8 @@ import DataSetLoader
 from tqdm import tqdm
 import nni
 import json
+import time
+import cv2 as cv
 
 def load_checkpoint(model, checkpoint_path):
 	"""
@@ -21,7 +23,7 @@ def load_checkpoint(model, checkpoint_path):
 	"""
 	model_ckp = torch.load(checkpoint_path)
 	model.load_state_dict(model_ckp['model_state_dict'])
-	return model
+	return model#TODO.to(device)
 
 def parse_arguments(): 
 	"""
@@ -39,8 +41,7 @@ def parse_arguments():
 	"""
 	parser = argparse.ArgumentParser(description='TA Knowledge Distillation Code')
 	parser.add_argument('--epochs', default=10, type=int,  help='number of total epochs to run')
-	#parser.add_argument('--dataset', default='cifar100', type=str, help='dataset. can be either cifar10 or cifar100') #TODO make this compatable with my dataset
-	parser.add_argument('--batch-size', default=8, type=int, help='batch_size')
+	parser.add_argument('--batch-size', default=16, type=int, help='batch_size')
 	parser.add_argument('--learning-rate', default=0.1, type=float, help='initial learning rate')
 	parser.add_argument('--momentum', default=0.9, type=float,  help='SGD momentum')
 	parser.add_argument('--weight-decay', default=1e-4, type=float, help='SGD weight decay (default: 1e-4)')
@@ -49,17 +50,21 @@ def parse_arguments():
 	parser.add_argument('--teacher-checkpoint', default='', type=str, help='optinal pretrained checkpoint for teacher')
 	parser.add_argument('--cuda', default='', type=str, help='whether or not use cuda(train on GPU)')
 	parser.add_argument('--dataset-dir', default='./data', type=str,  help='dataset directory')
+	parser.add_argument('--dataset-size', default='1', type=float, help='percentage of dataset used')
+	parser.add_argument('--data-prefetch', default='1', type=int, help='how many batches are prefetched by the data loader')
+	parser.add_argument('--loader-workers', default='1', type=int, help='how many workers/threads are used to download data by the data loader')
+
 	args = parser.parse_args()
 	return args
 
 
 class TrainManager(object):
 	def __init__(self, student, teacher=None, train_loader=None, test_loader=None, train_config={}, label_map_file=None):
-		self.student = student
-		self.teacher = teacher
+		self.device = train_config['device']
+		self.student = student.to(self.device)
+		self.teacher = teacher.to(self.device) if teacher else None
 		self.label_map_file = label_map_file
 		self.have_teacher = bool(self.teacher)
-		self.device = train_config['device']
 		self.name = train_config['name']
 		self.optimizer = optim.SGD(self.student.parameters(),
 								   lr=train_config['learning_rate'],
@@ -74,6 +79,7 @@ class TrainManager(object):
 		self.config = train_config
 	
 	def train(self):
+		print("Student model device:", next(self.student.parameters()).device)
 		lambda_ = self.config['lambda_student']
 		T = self.config['T_student']
 		epochs = self.config['epochs']
@@ -89,17 +95,22 @@ class TrainManager(object):
 			self.student.train()
 			self.adjust_learning_rate(self.optimizer, epoch)
 			loss = 0
-			
 			for batch_idx, (inputs, labels) in enumerate(tqdm(self.train_loader,desc="Training")):
+				start_time = time.time()
+
 				labels = [label_mapping[l] for l in labels] 
+				mapping_time = time.time() - start_time
+
 				inputs = inputs.clone().detach().to(self.device) #inputs already tensor
 				labels = torch.tensor(labels, dtype=torch.long).to(self.device)
+				prepare_time = time.time() - start_time - mapping_time
 
 				self.optimizer.zero_grad()
 				output = self.student(inputs)
 
 				loss_SL = criterion(output, labels) 
 				loss = loss_SL
+				forward_time = time.time() - start_time - mapping_time - prepare_time
 				
 				if self.have_teacher:
 					teacher_outputs = self.teacher(inputs)
@@ -107,9 +118,11 @@ class TrainManager(object):
 					loss_KD = nn.KLDivLoss()(F.log_softmax(output / T, dim=1), F.softmax(teacher_outputs / T, dim=1))
 
 					loss = (1 - lambda_) * loss_SL + lambda_ * T * T * loss_KD
-					
 				loss.backward()
+				backward_time = time.time() - start_time - mapping_time - prepare_time - forward_time
+
 				self.optimizer.step()
+				#print(f"Batch {batch_idx}: Mapping {mapping_time:.2f}s, Prepare {prepare_time:.2f}s, Forward {forward_time:.2f}s, Backward {backward_time:.2f}s")
 			
 			#print("epoch {}/{}".format(epoch, epochs))
 			val_acc = self.validate(step=epoch)
@@ -196,27 +209,28 @@ if __name__ == "__main__":
 	trial_id = os.environ.get('NNI_TRIAL_JOB_ID')
 	#dataset = args.dataset
 	num_classes = 97#TODO method of determing class size from dataset
-	teacher_model = None
-	student_model = ResNet.ResNet_Model(ResNet.Bottleneck, model_shapes.get(args.student), num_classes=num_classes) 
 	train_config = {
 	'epochs': args.epochs,
 	'learning_rate': args.learning_rate,
 	'momentum': args.momentum,
 	'weight_decay': args.weight_decay,
-	'device': 'cuda' if args.cuda else 'cpu',
+	'device': 'cuda' if args.cuda.lower() =='true' and torch.cuda.is_available() else 'cpu',
 	'trial_id': trial_id,
 	'T_student': config.get('T_student'),
 	'lambda_student': config.get('lambda_student'),	
 	}
+	teacher_model = None
+	student_model = ResNet.ResNet_Model(ResNet.Bottleneck, model_shapes.get(args.student), num_classes=num_classes,device=train_config['device']) 
+	
 
 	if args.teacher:	
-		teacher_model = ResNet.ResNet_Model(ResNet.Bottleneck, model_shapes.get(args.teacher), num_classes=num_classes) # TODO pass correct arguments
+		teacher_model = ResNet.ResNet_Model(ResNet.Bottleneck, model_shapes.get(args.teacher), num_classes=num_classes,device=train_config['device']) # TODO pass correct arguments
 		if args.teacher_checkpoint:
 			print("---------- Loading Teacher -------")
 			teacher_model = load_checkpoint(teacher_model, args.teacher_checkpoint)
 		else:
 			print("---------- Training Teacher -------")
-			train_loader,test_loader,label_file_name = DataSetLoader.load_dataset(batch_size=args.batch_size)
+			train_loader,test_loader,label_file_name = DataSetLoader.load_dataset(batch_size=args.batch_size,dataset_percentage=args.dataset_size,prefetch_factor=args.data_prefetch,num_workers=args.loader_workers)
 			teacher_train_config = copy.deepcopy(train_config)
 			teacher_name = '{}_{}_best.pth.tar'.format(args.teacher, trial_id)
 			teacher_train_config['name'] = args.teacher
@@ -226,7 +240,7 @@ if __name__ == "__main__":
 
 	print("---------- Training Student -------")
 	student_train_config = copy.deepcopy(train_config)
-	train_loader,test_loader,label_file_name = DataSetLoader.load_dataset(batch_size=args.batch_size)
+	train_loader,test_loader,label_file_name = DataSetLoader.load_dataset(batch_size=args.batch_size,dataset_percentage=args.dataset_size,prefetch_factor=args.data_prefetch,num_workers=args.loader_workers)
 	student_train_config['name'] = args.student
 	student_trainer = TrainManager(student_model, teacher=teacher_model, train_loader=train_loader, test_loader=test_loader, train_config=student_train_config,label_map_file=label_file_name)
 	best_student_acc = student_trainer.train()

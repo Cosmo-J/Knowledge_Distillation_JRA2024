@@ -1,0 +1,8 @@
+torch
+boto3
+torchvision
+Pillow
+scikit-learn
+tqdm
+optuna
+nni
