@@ -72,19 +72,19 @@ class S3Dataset(Dataset):
         allowedAttempts = 3
         done = False
 
-        while attempts < allowedAttempts and not done:
+        while attempts < allowedAttempts:
             try:
                 img_obj = s3.get_object(Bucket=self.bucket, Key=image_key)
                 image = Image.open(io.BytesIO(img_obj['Body'].read()))
-                done = True
-            except Image.UnidentifiedImageError:
-                done = False
+                return image
+            except:
+                attempts+=1
 
-        if not done:
-            for img in self.images:
-                if img['species'] == img_metadata['species'] and img != img_metadata:
-                    image = self.download_image(f"{self.prefix}{img_metadata['file_name']}",idx,img_metadata)
-                    break
+        # if it cant be found looks for another image of the same species
+        for img in self.images:
+            if img['species'] == img_metadata['species'] and img != img_metadata:
+                image = self.download_image(f"{self.prefix}{img_metadata['file_name']}",idx,img_metadata)
+                break
         return image
 
     

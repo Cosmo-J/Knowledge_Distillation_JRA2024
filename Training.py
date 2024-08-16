@@ -114,7 +114,7 @@ class TrainManager(object):
 
 			if val_acc > best_acc:
 				best_acc = val_acc
-				self.save(epoch)
+				self.resulter.SaveModel(self.student.state_dict(),self.optimizer.state_dict(),epoch)
 		
 		return best_acc
 	
@@ -126,7 +126,6 @@ class TrainManager(object):
 			acc = 0
 			for inputs, slabels in self.test_loader:
 				labels = [self.label_mapping[l] for l in slabels] 
-				print(f"slabels:{slabels}")
 				inputs = inputs.clone().detach().to(self.device)
 				labels = torch.tensor(labels, dtype=torch.long).to(self.device)
 				outputs = self.student(inputs)
