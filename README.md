@@ -2,7 +2,9 @@
 # Knowledge Distillation applied to Computer Vision
 
 ## Overview
-This project investigated the feasability of applying knowledge distillation to a computer vision task.
+This project investigated the feasibility of applying knowledge distillation to a computer vision task.
+I demonstrated model compression successfully, decreasing the file size of a computer vision model (whilst maintaining a relatively high accuracy).
+Conducted over three months, I believe my research made a relevant contribution to the field, further demonstrating the viability of knowledge distillation for improving the accessibility of computer vision models.
 
 
 
@@ -10,6 +12,7 @@ This project investigated the feasability of applying knowledge distillation to 
 ## Acknowledgements
 
 - [Code base based on the work of Iman Mirzadeh](https://github.com/imirzadeh/Teacher-Assistant-Knowledge-Distillation)
+- [Dataset used in this project by LILA BC](https://lila.science/datasets/nz-trailcams)
 
 - Thank you to my retired 1080 TI who's noble sacrifise will not be forgotten
 ## Poster References
