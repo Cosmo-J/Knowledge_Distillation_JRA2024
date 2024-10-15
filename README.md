@@ -9,12 +9,12 @@ This project investigated the feasability of applying knowledge distillation to 
 
 ## Acknowledgements
 
-- [Code base based on the work of Iman Mirzadeh](# Semi-Supervised-Deep-Learning-for-Estimating-Fur-Seal-Numbers)
+- [Code base based on the work of Iman Mirzadeh](https://github.com/imirzadeh/Teacher-Assistant-Knowledge-Distillation)
 
 - Thank you to my retired 1080 TI who's noble sacrifise will not be forgotten
 ## Poster References
 
-[Estimating Seal Population](https://github.com/Cosmo-J/Knowledge_Distillation_JRA2024/tree/main?tab=readme-ov-file#machine-learning-for-microcontroller-class-hardware)
+[Estimating Seal Population](#Semi-Supervised-Deep-Learning-for-Estimating-Fur-Seal-Numbers)
 ## Bibliography
 
 ### Real-Time Robot Vision on Low-Performance Computing Hardware 
