@@ -2,7 +2,7 @@
 # Knowledge Distillation applied to Computer Vision
 
 ## Overview
-This project investigated the feasibility of applying knowledge distillation to a computer vision task.
+This project investigated the feasibility of applying knowledge distillation to a computer vision task and was sponsored by the [University of Sussex](https://www.sussex.ac.uk/) as part of their [Junior Research Associate Scheme](https://www.sussex.ac.uk/study/undergraduate/undergraduate-research/junior-research-associates).
 I demonstrated model compression successfully, decreasing the file size of a computer vision model (whilst maintaining a relatively high accuracy).
 Conducted over three months, I believe my research made a relevant contribution to the field, further demonstrating the viability of knowledge distillation for improving the accessibility of computer vision models.
 
@@ -15,6 +15,9 @@ Conducted over three months, I believe my research made a relevant contribution 
 - [Dataset used in this project by LILA BC](https://lila.science/datasets/nz-trailcams)
 
 - Thank you to my retired 1080 TI who's noble sacrifise will not be forgotten
+- Thank you to my mentor Dexter Shepherd and supervisor Phil Husbands
+
+
 ## Poster References
 
 [Estimating Seal Population](#Semi-Supervised-Deep-Learning-for-Estimating-Fur-Seal-Numbers)
