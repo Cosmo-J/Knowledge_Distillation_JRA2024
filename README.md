@@ -18,7 +18,7 @@ This project investigated the feasability of applying knowledge distillation to 
 
 [Detecting Poachers](#TrailGaurd)
 
-[Cost, Processing Power, Energy, tinyML](#TinyML:-A-Systematic-Review-and-Synthesis-of-Existing-Research)
+[tinyML](#TinyML-A-Systematic-Review-and-Synthesis-of-Existing-Research)
 
 [Knowledge Distillation](#Improved-Knowledge-Distillation-via-Teacher-Assistant)
 
@@ -71,7 +71,7 @@ Thomson Reuters Foundation. Agri-tech Digital Tools Boost Crops for Farmers acro
 ### Improved Knowledge Distillation via Teacher Assistant
 Mirzadeh, Seyed Iman, Farajtabar, Mehrdad, Li, Ang, Levine, Nir, Matsukawa, Akihiro, & Ghasemzadeh, Hassan. (2020). Improved Knowledge Distillation via Teacher Assistant. Proceedings of the AAAI Conference on Artificial Intelligence, 34(04), 5191–5198. https://doi.org/10.1609/aaai.v34i04.5963
 
-### TinyML: A Systematic Review and Synthesis of Existing Research
+### TinyML\: A Systematic Review and Synthesis of Existing Research
 Han, Hui, & Siebert, Julien. (2022). TinyML: A Systematic Review and Synthesis of Existing Research. 2022 International Conference on Artificial Intelligence in Information and Communication (ICAIIC), 269–274. https://doi.org/10.1109/ICAIIC54071.2022.9722636
 
 ### TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers
@@ -79,8 +79,6 @@ Warden, Pete, & Situnayake, Daniel. (2019). TinyML: Machine Learning with Tensor
 
 ### MicroNets: Neural Network Architectures for Deploying TinyML Applications on Commodity Microcontrollers
 Banbury, Colby, Zhou, Chuteng, Fedorov, Igor, Navarro, Ramon Matas, Thakker, Urmish, Gope, Dibakar, Reddi, Vijay Janapa, Mattina, Matthew, & Whatmough, Paul N. (2021). MicroNets: Neural Network Architectures for Deploying TinyML Applications on Commodity Microcontrollers. arXiv. https://doi.org/10.48550/arXiv.2010.11267
-
-
 
 ### AirSim: High-Fidelity Visual and Physical Simulation for Autonomous Vehicles
 Shah, Shital, Dey, Debadeepta, Lovett, Chris, & Kapoor, Ashish. (2017). AirSim: High-Fidelity Visual and Physical Simulation for Autonomous Vehicles. arXiv. https://doi.org/10.48550/arXiv.1705.05065
