@@ -15,8 +15,11 @@ This project investigated the feasability of applying knowledge distillation to 
 ## Poster References
 
 [Estimating Seal Population](#Semi-Supervised-Deep-Learning-for-Estimating-Fur-Seal-Numbers)
+
 [Detecting Poachers](#TrailGaurd)
+
 [Cost, Processing Power, Energy, tinyML](#TinyML:-A-Systematic-Review-and-Synthesis-of-Existing-Research)
+
 [Knowledge Distillation](#Improved-Knowledge-Distillation-via-Teacher-Assistant)
 
 
