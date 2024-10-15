@@ -14,7 +14,7 @@ This project investigated the feasability of applying knowledge distillation to 
 - Thank you to my retired 1080 TI who's noble sacrifise will not be forgotten
 ## Poster References
 
-[Estimating Seal Population]()
+[Estimating Seal Population](https://github.com/Cosmo-J/Knowledge_Distillation_JRA2024/tree/main?tab=readme-ov-file#machine-learning-for-microcontroller-class-hardware)
 ## Bibliography
 
 ### Real-Time Robot Vision on Low-Performance Computing Hardware 
@@ -51,7 +51,7 @@ Luo, Zhengyi, Small, Austin, Dugan, Liam, & Lane, Stephen. (2019). Cloud Chaser:
 ### Semi-Supervised Deep Learning for Estimating Fur Seal Numbers
 Chen, Rujia, Ghobakhlou, Akbar, Narayanan, Ajit, Pérez, Matías, Oyanadel, Roberto Orlano Chavez, & Borras-Chavez, Renato. (2023). Semi-Supervised Deep Learning for Estimating Fur Seal Numbers. 2023 38th International Conference on Image and Vision Computing New Zealand (IVCNZ), 1–5. https://doi.org/10.1109/IVCNZ61134.2023.10343918
 
-### omputer Vision Based Knowledge Distillation Model for Animal Classification and Re-Identification Using Siamese Neural Network
+### Computer Vision Based Knowledge Distillation Model for Animal Classification and Re-Identification Using Siamese Neural Network
 Ashok Kumar, L., Karthika Renuka, D., & Saravana Kumar, S. (2023). Computer Vision Based Knowledge Distillation Model for Animal Classification and Re-Identification Using Siamese Neural Network. Journal of Intelligent & Fuzzy Systems, 44(4), 5731–5743. https://doi.org/10.3233/JIFS-222672
 
 ### Knowledge Distillation: A Survey
